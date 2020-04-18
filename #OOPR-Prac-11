@@ -1,0 +1,79 @@
+class Consultant:
+    def __init__(self,name,registered_company_list, vacancy_list, registered_student_dict):
+        self.__name = name 
+        self.__registered_company_list = registered_company_list
+        self.__vacancy_list = vacancy_list
+        self.__registered_student_dict = registered_student_dict
+    
+    def get_name(self):
+        return self.__name
+    def get_registered_company_list(self):
+        return self.__registered_company_list
+    def get_vacancy_list(self):
+        return self.__vacancy_list
+    def get_registered_student_dict(self):
+        return self.__registered_student_dict
+    
+    def validate_vacancy(self,company_name):
+        if company_name in self.__registered_company_list:
+            index= self.__registered_company_list.index(company_name)
+            if self.__vacancy_list[index] > 0 :
+                return index 
+            else:
+                return -1 
+        else:
+            return -1 
+    
+    def register_student_for_placement (self,index,student_id):
+        if index != -1 :
+            x= self.__registered_company_list[index]
+            for key,value in self.__registered_student_dict.items():
+                if key== x:
+                    self.__registered_student_dict[key].append(student_id)
+                    self.__vacancy_list[index] -= 1 
+                    break 
+                
+class Student:
+    def __init__(self,name,student_id,branch, aggregate_percentage,year_of_passing):
+        self.__name = name
+        self.__student_id =student_id
+        self.__branch = branch
+        self.__aggregate_percentage = aggregate_percentage
+        self.__year_of_passing = year_of_passing
+    
+    def get_name(self):
+        return self.__name
+    def get_student_id(self):
+        return self.__student_id
+    def get_branch(self):
+        self.__branch
+    def get_aggregate_percentage(self):
+        self.__aggregate_percentage
+    def get_year_of_passing(self):
+        return self.__year_of_passing
+    
+    def check_eligibility(self):
+        if self.__aggregate_percentage >= 65 :
+            if self.__year_of_passing == 2015:
+                return True 
+            else:
+                return False
+        else:
+                return False
+    
+    def apply_for_job(self,company_name,consultant):
+        index = consultant.validate_vacancy(company_name)
+        if index != -1 :
+            if self.check_eligibility():
+                student_id=self.__student_id
+                consultant.register_student_for_placement(index,student_id)
+            else:
+                return -1 
+        else:
+            return -1 
+            
+registered_student_dict= {"infosys":[123,345,346,230],"ibm":[],"accenture":[234,34,890],"wipro":[10,20]}
+c=Consultant("Wehire",["infosys","wipro","ibm","accenture"],[5,9,7,8],registered_student_dict)
+s=Student("sam","20","ece",64,2015)
+print(s.check_eligibility())
+print(s.apply_for_job("infosys",c))
